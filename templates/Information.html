@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business and Data Understanding - Library Analysis</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #1a1d24;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: #e2e8f0;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        h1 {
+            color: #ec4899;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .phase-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: #242936;
+            border-left: 5px solid #ec4899;
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .card h2 {
+            color: #f8fafc;
+            font-size: 1.35rem;
+            margin-bottom: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            color: #94a3b8;
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .card p strong {
+            color: #cbd5e1;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        .card li::before {
+            content: "•";
+            color: #ec4899;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, #242936 0%, #1e222b 100%);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 30px;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .conclusion-box p {
+            color: #94a3b8;
+            font-style: italic;
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Business and Data Understanding</h1>
+            <p class="subtitle">User Behavior Analysis in Colombian Public Libraries Using Open Cultural Data</p>
+        </header>
+
+        <main class="phase-grid">
+            <div class="card">
+                <h2>Business Objectives</h2>
+                <p><strong>Institutional Need:</strong> Optimize service offerings, budget allocation, and cultural agendas across the National Network of Public Libraries (RNBP) in Colombia to maximize community impact and foster lifelong reading habits.</p>
+                <p><strong>Machine Learning Goal:</strong> Develop robust clustering and predictive models to identify attendance patterns, cultural consumption preferences, and local resource demands, enabling decision-makers to tailor regional and local library strategies effectively.</p>
+            </div>
+
+            <div class="card">
+                <h2>Key Questions</h2>
+                <p>Identify the specific questions and metrics that the analytical model must solve:</p>
+                <ul>
+                    <li>What are the sociodemographic profiles of the most active users across different regions and municipalities in Colombia?</li>
+                    <li>Which types of resources (physical books, digital media, audiovisual assets) or cultural activities experience the highest demand based on seasonal trends or days of the week?</li>
+                    <li>Can we accurately predict user churn (users likely to stop borrowing materials or attending events) based on historical interaction logs?</li>
+                    <li>How do local infrastructure conditions and geographical variables influence the overall frequency of citizen visits?</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Data Assessment</h2>
+                <p>Explore the quality, relevance, and sufficiency of the available public data assets:</p>
+                <ul>
+                    <li><strong>Data Sources:</strong> Data will be harvested from the official Colombian Open Data portal (<code>datos.gov.co</code>), focusing on public datasets maintained by the Ministry of Culture, the RNBP, and localized major networks like BibloRed.</li>
+                    <li><strong>Quality & Relevance:</strong> Historical logs of book loans, anonymized user registrations, and event attendance counts are highly relevant. However, deep preprocessing is required to standardize regional names and clean data entry inconsistencies.</li>
+                    <li><strong>Sufficiency:</strong> We must evaluate whether open datasets offer transaction-level granularity or only aggregate monthly summaries, as aggregated metrics might limit the depth of predictive behavioral modeling.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Feasibility Analysis</h2>
+                <p>Consider constraints and operational risks to ensure technical and organizational viability:</p>
+                <ul>
+                    <li><strong>Technical Feasibility:</strong> High capability for data transformation since open data formats (CSV, JSON) map naturally to standard data science environments (Python/R). The principal risk is the extensive data cleaning required due to disparate legacy registration systems across municipalities.</li>
+                    <li><strong>Organizational Feasibility:</strong> Legally sound as datasets are pre-anonymized and publicly available, fully adhering to Colombian Data Protection Laws (Habeas Data). The main organizational hurdle involves training local library staff to easily interpret and apply data insights to daily operations.</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="conclusion-box">
+            <p>In this initial phase, it is fundamental to deeply understand the social impact of libraries in Colombia and translate it into concrete analytical goals. Following structured data project management methodologies, this stage lays the foundation to guarantee that the technical effort is directly aligned with cultural decentralization and the real needs of Colombian communities.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
