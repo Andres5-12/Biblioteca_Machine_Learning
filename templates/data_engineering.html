@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Data Engineering{% endblock %}
+{% block description %}Explain how the public library datasets are ingested, cleaned, and integrated for analysis.{% endblock %}
+
+{% block content %}
+    <div class="section-card">
+        <h2>Data Engineering Overview</h2>
+        <p>The current pipeline implements the data engineering steps needed to produce a clean, integrated dataset from heterogeneous public library sources.</p>
+    </div>
+
+    <div class="section-card">
+        <h2>Ingestion</h2>
+        <p>Data is extracted from the Colombian open data portal using APIs with pagination to handle large datasets safely.</p>
+        <ul>
+            <li>Four sources are ingested individually.</li>
+            <li>Requests are performed with limit and offset controls.</li>
+            <li>Each raw dataset is captured before transformation.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Cleaning</h2>
+        <p>Each dataset is cleaned with source-specific rules, including column normalization and standardization of categorical values.</p>
+        <ul>
+            <li>Column names are converted to snake_case and stripped of accents.</li>
+            <li>Department and municipality names are normalized and capitalized consistently.</li>
+            <li>Numeric fields such as collection volume and registered users are coerced to numeric type.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Integration</h2>
+        <p>After cleaning, the datasets are concatenated into a master table with a unified schema.</p>
+        <ul>
+            <li>Missing columns are added with null values to preserve consistent structure.</li>
+            <li>Duplicate records are removed based on library name, municipality, and department.</li>
+            <li>Source metadata is preserved for traceability.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Enrichment and Export</h2>
+        <p>The master dataset is enriched with derived attributes and exported to CSV/Excel for reporting or future modeling.</p>
+        <ul>
+            <li>Region labels are derived from department names.</li>
+            <li>Connectivity flags are normalized across datasets.</li>
+            <li>Final outputs include both raw tables and summary sheets for analysis.</li>
+        </ul>
+    </div>
+{% endblock %}

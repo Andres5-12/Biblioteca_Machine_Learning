@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Data Understanding{% endblock %}
+{% block description %}Document the datasets, their structure, and the quality considerations for the public library analysis.{% endblock %}
+
+{% block content %}
+    <div class="section-card">
+        <h2>Dataset Sources</h2>
+        <p>The project uses four open datasets from the Colombian government open data portal. Each dataset represents a public library network with unique metadata and regional coverage.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Dataset</th>
+                    <th>Description</th>
+                    <th>Source ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, source in sources.items() %}
+                <tr>
+                    <td>{{ key.replace('_', ' ').title() }}</td>
+                    <td>{{ source.description }}</td>
+                    <td>{{ source.id }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-card">
+        <h2>Quality and Structure</h2>
+        <p>The available data includes library names, locations, contact information, service types, and some operational indicators such as internet availability and collection volume.</p>
+        <ul>
+            <li>Column names are normalized to a common snake_case format.</li>
+            <li>Regional labels often include accents and inconsistent capitalization, requiring standardization.</li>
+            <li>Numeric values may be stored as text and require coercion to proper numeric types.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Master Schema</h2>
+        <p>The unified dataset is arranged into a master table with consistent columns across all sources.</p>
+        <ul>
+            {% for column in master_columns %}
+            <li>{{ column }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Data Understanding Notes</h2>
+        <ul>
+            <li>Some sources include only location and contact details while others add operational attributes.</li>
+            <li>Missing values are expected for specific fields in particular datasets.</li>
+            <li>An initial data audit is required before advancing to modeling stages.</li>
+        </ul>
+    </div>
+{% endblock %}

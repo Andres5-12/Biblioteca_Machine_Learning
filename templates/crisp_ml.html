@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}CRISP-ML Methodology{% endblock %}
+{% block description %}This page describes the CRISP-ML phases used to start the public library machine learning project.{% endblock %}
+
+{% block content %}
+    <div class="section-card">
+        <h2>What is CRISP-ML?</h2>
+        <p>CRISP-ML is a lifecycle methodology for machine learning projects. It is designed to help teams move from a business problem to a deployable data product in a structured way.</p>
+    </div>
+
+    <div class="section-card">
+        <h2>Core Phases Implemented</h2>
+        <ul>
+            <li><strong>Business Understanding:</strong> Define the project objectives, business questions, and success criteria for public library analytics.</li>
+            <li><strong>Data Understanding:</strong> Explore the available open datasets, validate data quality, and understand the information contained in each source.</li>
+            <li><strong>Data Engineering:</strong> Ingest, clean, normalize, integrate, and enrich data to create a reliable dataset for future analytics and modeling tasks.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>How the methodology applies here</h2>
+        <p>For this project, the first three CRISP-ML phases are implemented in Flask as separate documentation pages. The dataset comes from Colombian open library networks, and the current work focuses on preparing the data for later modeling.</p>
+        <ul>
+            <li>We capture the business motivation behind the library analysis.</li>
+            <li>We describe the available data sources and the most important attributes.</li>
+            <li>We explain the data engineering pipeline that transforms these raw sources into a unified dataset.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Next Phase</h2>
+        <p>The next CRISP-ML steps beyond this application are modeling, evaluation, deployment, and monitoring. These phases will be easier once the dataset is standardized and the business goals are clearly defined.</p>
+    </div>
+{% endblock %}

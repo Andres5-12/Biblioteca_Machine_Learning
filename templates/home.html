@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Library ML Project{% endblock %}
+{% block description %}Welcome to the Flask application that illustrates the first phases of a machine learning project using CRISP-ML and library open data.{% endblock %}
+
+{% block content %}
+    <div class="section-card">
+        <h2>Project Overview</h2>
+        <p>This academic project documents the initial stages of a machine learning initiative for Colombian public libraries. The application is designed to show:</p>
+        <ul>
+            <li>Business understanding of a real world problem.</li>
+            <li>Data understanding of public library datasets from Colombian open data portals.</li>
+            <li>Data engineering steps that prepare the data for future modeling.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Goals for the Flask Application</h2>
+        <ul>
+            <li>Build a navigation menu with the required CRISP-ML phases.</li>
+            <li>Document the dataset, data quality, and cleaning process in English.</li>
+            <li>Use the existing dataset definitions located in <code>pipeline.py</code>.</li>
+            <li>Prepare the project for deployment to Render.com.</li>
+        </ul>
+    </div>
+
+    <div class="summary-grid">
+        <div class="summary-box">
+            <h3>Phase</h3>
+            <p>Business Understanding</p>
+        </div>
+        <div class="summary-box">
+            <h3>Phase</h3>
+            <p>Data Understanding</p>
+        </div>
+        <div class="summary-box">
+            <h3>Phase</h3>
+            <p>Data Engineering</p>
+        </div>
+        <div class="summary-box">
+            <h3>Data Source</h3>
+            <p>Colombian public library open data.</p>
+        </div>
+    </div>
+{% endblock %}

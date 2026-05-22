@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library ML Project{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        header.site-header {
+            background: linear-gradient(135deg, #1d4ed8, #0f172a);
+            padding: 24px 32px;
+            border-bottom: 1px solid #334155;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 2rem;
+            letter-spacing: -0.03em;
+        }
+        .site-header p {
+            color: #94a3b8;
+            margin: 8px 0 0;
+            max-width: 860px;
+        }
+        nav {
+            background: #111827;
+            padding: 14px 32px;
+            border-bottom: 1px solid #334155;
+        }
+        nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: background 0.2s ease, color 0.2s ease;
+            font-weight: 600;
+        }
+        nav a:hover,
+        nav a.active {
+            background: #1e40af;
+            color: #f8fafc;
+        }
+        .page-wrapper {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 28px 24px 48px;
+        }
+        .section-card {
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 16px 35px rgba(15, 23, 42, 0.18);
+        }
+        .section-card h2 {
+            margin-top: 0;
+            color: #f8fafc;
+        }
+        .section-card p,
+        .section-card li,
+        .section-card dd {
+            color: #cbd5e1;
+            line-height: 1.75;
+        }
+        .section-card ul {
+            margin: 12px 0 0 20px;
+            padding: 0;
+        }
+        .section-card li {
+            margin-bottom: 10px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+        .summary-box {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .summary-box h3 {
+            margin-top: 0;
+            color: #93c5fd;
+        }
+        code {
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 2px 5px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid #1e293b;
+        }
+        th {
+            color: #93c5fd;
+            background: #020617;
+        }
+        td {
+            color: #cbd5e1;
+        }
+        .footer-note {
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 36px;
+            padding-top: 18px;
+            border-top: 1px solid #334155;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 640px) {
+            header.site-header,
+            nav,
+            .page-wrapper {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+            nav ul {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <h1>{{ self.title() }}</h1>
+        <p>{% block description %}A structured project portal built with Flask to document CRISP-ML stages and public library data preparation.{% endblock %}</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+            <li><a href="{{ url_for('crisp_ml') }}" class="{% if request.path == '/crisp-ml' %}active{% endif %}">CRISP-ML</a></li>
+            <li><a href="{{ url_for('business_understanding') }}" class="{% if request.path == '/business-understanding' %}active{% endif %}">Business Understanding</a></li>
+            <li><a href="{{ url_for('data_understanding') }}" class="{% if request.path == '/data-understanding' %}active{% endif %}">Data Understanding</a></li>
+            <li><a href="{{ url_for('data_engineering') }}" class="{% if request.path == '/data-engineering' %}active{% endif %}">Data Engineering</a></li>
+        </ul>
+    </nav>
+    <div class="page-wrapper">
+        {% block content %}{% endblock %}
+    </div>
+    <div class="footer-note">
+        This project follows the CRISP-ML methodology for a public library analytics use case.
+    </div>
+</body>
+</html>
