@@ -48,6 +48,58 @@
             transition: background 0.2s ease, color 0.2s ease;
             font-weight: 600;
         }
+        .comparison-grid {
+            display: grid;
+            gap: 18px;
+            margin-top: 18px;
+        }
+        .comparison-item {
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 18px;
+        }
+        .metric-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .metric-label {
+            min-width: 110px;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        .metric-bar-wrapper {
+            flex: 1;
+            min-width: 100px;
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 999px;
+            height: 14px;
+            overflow: hidden;
+        }
+        .metric-bar {
+            display: inline-block;
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #38bdf8, #2563eb);
+        }
+        .confusion-table {
+            width: 100%;
+            max-width: 420px;
+            margin-top: 12px;
+        }
+        .confusion-table th,
+        .confusion-table td {
+            text-align: center;
+        }
+        .best-model {
+            background: #111827;
+            border: 1px solid #2563eb;
+            padding: 24px;
+            border-radius: 18px;
+        }
         nav a:hover,
         nav a.active {
             background: #1e40af;
@@ -155,6 +207,9 @@
             <li><a href="{{ url_for('business_understanding') }}" class="{% if request.path == '/business-understanding' %}active{% endif %}">Business Understanding</a></li>
             <li><a href="{{ url_for('data_understanding') }}" class="{% if request.path == '/data-understanding' %}active{% endif %}">Data Understanding</a></li>
             <li><a href="{{ url_for('data_engineering') }}" class="{% if request.path == '/data-engineering' %}active{% endif %}">Data Engineering</a></li>
+            <li><a href="{{ url_for('model_engineering') }}" class="{% if request.path == '/model-engineering' %}active{% endif %}">Model Engineering</a></li>
+            <li><a href="{{ url_for('model_development') }}" class="{% if request.path == '/model-development' %}active{% endif %}">Model Development</a></li>
+            <li><a href="{{ url_for('model_evaluation') }}" class="{% if request.path == '/model-evaluation' %}active{% endif %}">Model Evaluation</a></li>
         </ul>
     </nav>
     <div class="page-wrapper">

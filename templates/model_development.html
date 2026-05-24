@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Model Development{% endblock %}
+{% block description %}Document the model training process for Colombian public library classification and regression tasks.{% endblock %}
+
+{% block content %}
+    <div class="section-card">
+        <h2>Model Development Overview</h2>
+        <p>This page documents the full model development process applied to the Colombian public library dataset. The goal is to train models that predict two important library attributes: whether a library has internet connectivity (classification) and the expected number of registered users (regression).</p>
+    </div>
+
+    <div class="section-card">
+        <h2>Target Variables and Problem Definition</h2>
+        <p>The modeling effort focuses on two prediction tasks grounded in the public library dataset:</p>
+        <ul>
+            <li><strong>Classification Task:</strong> Predict whether a library has internet connectivity based on location, library type, and operational characteristics. Target: has_internet (binary).</li>
+            <li><strong>Regression Task:</strong> Predict the number of registered users a library will have based on department, region, collection volume, and service type. Target: usuarios_registrados (continuous).</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Dataset Source and Features</h2>
+        <p>The data comes from four Colombian public library networks:</p>
+        <ul>
+            <li><strong>Red Nacional de Bibliotecas Públicas:</strong> National directory of public libraries.</li>
+            <li><strong>BiblioRed Bogotá D.C.:</strong> Public library network in Bogotá.</li>
+            <li><strong>Red Departamental de Bolívar:</strong> Department of Bolívar's public library network.</li>
+            <li><strong>Bibliotecas Públicas de Casanare:</strong> Department of Casanare's public libraries.</li>
+        </ul>
+        <p>Key features extracted from the dataset include department, municipality, library type, natural region, collection volume, and internet availability flags.</p>
+    </div>
+
+    <div class="section-card">
+        <h2>Dataset Split</h2>
+        <p>The integrated library dataset is split into training and validation sets to support model training and unbiased evaluation.</p>
+        <ul>
+            <li>Typical split: 80% training, 20% validation on the ~1000+ library records.</li>
+            <li>Ensure random state is fixed for reproducible train/validation folds.</li>
+            <li>For classification, stratify by internet_connectivity to preserve class balance.</li>
+            <li>Handle missing values in user registrations using mean imputation or forward-filling techniques.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Feature Engineering for Libraries</h2>
+        <p>Features are prepared from library metadata to create robust inputs for model training:</p>
+        <pre><code>from sklearn.preprocessing import StandardScaler, LabelEncoder
+
+# Encode categorical library attributes
+encoder = LabelEncoder()
+X['departamento_encoded'] = encoder.fit_transform(X['departamento'])
+X['region_encoded'] = encoder.fit_transform(X['region_natural'])
+
+# Normalize numeric features
+scaler = StandardScaler()
+X['volumen_coleccion_scaled'] = scaler.fit_transform(X[['volumen_coleccion']])
+
+# Create derived feature: connectivity by region
+connectivity_by_region = df.groupby('region_natural')['tiene_internet_flag'].mean()
+X['region_connectivity_rate'] = X['region_natural'].map(connectivity_by_region)</code></pre>
+    </div>
+
+    <div class="section-card">
+        <h2>Training Process</h2>
+        <p>Models are trained on library features to predict connectivity and user registration targets:</p>
+        <pre><code>from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+
+# Classification: Predict internet connectivity
+clf = RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42)
+clf.fit(X_train, y_train_connectivity)
+pred_connectivity = clf.predict(X_val)
+
+# Regression: Predict registered users
+reg = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)
+reg.fit(X_train, y_train_users)
+pred_users = reg.predict(X_val)</code></pre>
+    </div>
+
+    <div class="section-card">
+        <h2>Hyperparameter Configuration</h2>
+        <p>Each model is optimized for the library classification and regression tasks:</p>
+        <ul>
+            <li><strong>Classification (Internet Connectivity):</strong> Maximize recall for underrepresented libraries; use class_weight='balanced' to handle imbalanced connectivity data.</li>
+            <li><strong>Regression (User Count):</strong> Minimize MAE to avoid large prediction errors for library planning purposes.</li>
+            <li><strong>Tree Depth:</strong> Limit depth to 8-10 to avoid overfitting on the relatively small library dataset (~1000 records).</li>
+            <li><strong>Feature Importance:</strong> Track which library attributes (region, department, collection volume) most strongly influence predictions.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Validation Process</h2>
+        <p>Validation is performed on the library test set using domain-relevant metrics:</p>
+        <ul>
+            <li><strong>Classification Validation:</strong> Accuracy, precision, recall for connectivity predictions; important for resource allocation decisions.</li>
+            <li><strong>Regression Validation:</strong> MAE and R² for user count predictions; helps identify which libraries will have high engagement.</li>
+            <li>Cross-validation with 5 folds ensures stability across different library samples.</li>
+            <li>Residual analysis reveals which regions or library types are harder to predict accurately.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Console Prediction Examples</h2>
+        <p>Example predictions from trained models on validation library data:</p>
+        <pre><code>Sample Classification Predictions (Internet Connectivity):
+Library: Red Nacional - Medellín → Has Internet: True (95% confidence)
+Library: BiblioRed - Bogotá → Has Internet: True (98% confidence)
+Library: Bolívar Regional - Cartagena → Has Internet: False (87% confidence)
+
+Sample Regression Predictions (Registered Users):
+Library: Central Bogotá → Predicted Users: 1245 (95% confidence interval: 1100-1390)
+Library: Rural Bolívar → Predicted Users: 187 (95% confidence interval: 120-254)</code></pre>
+    </div>
+
+    <div class="section-card">
+        <h2>Model Summaries</h2>
+        <p>Each candidate model is evaluated for its ability to support library planning and policy decisions:</p>
+        <ul>
+            <li><strong>Logistic Regression:</strong> Interpretable predictions for connectivity; useful for explaining to library administrators why a facility is predicted to have/not have internet.</li>
+            <li><strong>Random Forest:</strong> Captures complex patterns in regional library characteristics; identifies which attributes matter most for connectivity and user growth.</li>
+            <li><strong>Gradient Boosting:</strong> Strong predictive power for user count estimation; helps allocate resources to libraries with high predicted engagement.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Comparison Tables</h2>
+        <p>Performance comparison of models on library connectivity classification and user count regression tasks.</p>
+        <h3>Classification Models: Internet Connectivity Prediction</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1-score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in classification_results %}
+                <tr>
+                    <td>{{ row.model }}</td>
+                    <td>{{ row.accuracy|round(2) }}</td>
+                    <td>{{ row.precision|round(2) }}</td>
+                    <td>{{ row.recall|round(2) }}</td>
+                    <td>{{ row.f1|round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Regression Models: Registered Users Prediction</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>MAE (Users)</th>
+                    <th>MSE</th>
+                    <th>RMSE</th>
+                    <th>R²</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in regression_results %}
+                <tr>
+                    <td>{{ row.model }}</td>
+                    <td>{{ row.mae|round(2) }}</td>
+                    <td>{{ row.mse|round(2) }}</td>
+                    <td>{{ row.rmse|round(2) }}</td>
+                    <td>{{ row.r2|round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-card">
+        <h2>Integration with Flask Application</h2>
+        <p>This page documents the complete model development workflow for Colombian public library analytics, serving as both a technical reference and a communication tool for library stakeholders interested in understanding how ML supports their planning decisions.</p>
+    </div>
+{% endblock %}

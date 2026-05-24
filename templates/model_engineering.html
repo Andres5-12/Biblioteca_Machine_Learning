@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Model Engineering{% endblock %}
+{% block description %}Describe the candidate models, feature strategy, and selection plan for the machine learning evaluation phase.{% endblock %}
+
+{% block content %}
+    <div class="section-card">
+        <h2>Model Engineering Overview</h2>
+        <p>Model engineering is the phase where candidate algorithms are selected, features are prepared, and validation strategies are defined.</p>
+    </div>
+
+    <div class="section-card">
+        <h2>Candidate Models</h2>
+        <p>For a typical public library analytics problem, both classification and regression models are considered. The project evaluates three strong models for each task:</p>
+        <ul>
+            <li><strong>Classification:</strong> Logistic Regression, Random Forest Classifier, Gradient Boosting Classifier.</li>
+            <li><strong>Regression:</strong> Linear Regression, Random Forest Regressor, Gradient Boosting Regressor.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Feature Engineering</h2>
+        <p>The feature engineering process focuses on creating robust inputs for modeling by standardizing categorical values and deriving meaningful attributes.</p>
+        <ul>
+            <li>Normalize department and municipality names for consistent categorical encoding.</li>
+            <li>Convert numeric fields to proper numeric type and fill missing values in a pipeline-safe way.</li>
+            <li>Create derived features such as region group, connectivity availability, and library activity indicators.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Validation Strategy</h2>
+        <p>A reliable model selection process uses cross-validation and holdout test sets to compare candidate models with the same data splits.</p>
+        <ul>
+            <li>Use a holdout validation set or cross-validation to ensure evaluation metrics are stable.</li>
+            <li>Compare models using classification and regression metrics appropriate to the problem type.</li>
+            <li>Choose the model that balances accuracy, robustness, and interpretability for production implementation.</li>
+        </ul>
+    </div>
+{% endblock %}

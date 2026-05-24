@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Model Evaluation{% endblock %}
+{% block description %}Evaluate ML models for predicting internet connectivity and user registration in Colombian public libraries.{% endblock %}
+
+{% block content %}
+    <div class="section-card">
+        <h2>Model Evaluation Dashboard</h2>
+        <p>This page presents comprehensive evaluation metrics for three candidate models applied to two key library prediction tasks: internet connectivity classification and registered user count regression. The results guide the selection of the best model pair for library planning and resource allocation.</p>
+    </div>
+
+    <div class="section-card">
+        <h2>Classification Evaluation: Internet Connectivity Prediction</h2>
+        <p>Classification models are evaluated on their ability to accurately predict whether a Colombian public library has internet connectivity. Metrics include accuracy, precision, recall, and F1-score, along with confusion matrix analysis showing false positives and false negatives.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1-score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in classification_results %}
+                <tr>
+                    <td>{{ row.model }}</td>
+                    <td>{{ row.accuracy|round(2) }}</td>
+                    <td>{{ row.precision|round(2) }}</td>
+                    <td>{{ row.recall|round(2) }}</td>
+                    <td>{{ row.f1|round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="section-card">
+            <h3>Confusion Matrices: Internet Connectivity Classification</h3>
+            <p>The confusion matrices show prediction accuracy breakdown for each model. True Negatives (TN) represent libraries correctly predicted to lack internet; True Positives (TP) are libraries correctly predicted to have internet. False Positives (FP) and False Negatives (FN) reveal where predictions diverge from reality.</p>
+            {% for model_name, matrix in confusion_matrices.items() %}
+            <div class="section-card">
+                <h4>{{ model_name }}</h4>
+                <table class="confusion-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Predicted No Internet</th>
+                            <th>Predicted Has Internet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Actual No Internet</th>
+                            <td>{{ matrix.tn }}</td>
+                            <td>{{ matrix.fp }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actual Has Internet</th>
+                            <td>{{ matrix.fn }}</td>
+                            <td>{{ matrix.tp }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>Regression Evaluation: Registered Users Prediction</h2>
+        <p>Regression models are evaluated on their ability to estimate the number of registered users in a library, crucial for understanding library engagement and planning services. Metrics include Mean Absolute Error (MAE), Mean Squared Error (MSE), Root Mean Squared Error (RMSE), and R² (coefficient of determination).</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>MAE (Users)</th>
+                    <th>MSE</th>
+                    <th>RMSE</th>
+                    <th>R²</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in regression_results %}
+                <tr>
+                    <td>{{ row.model }}</td>
+                    <td>{{ row.mae|round(2) }}</td>
+                    <td>{{ row.mse|round(2) }}</td>
+                    <td>{{ row.rmse|round(2) }}</td>
+                    <td>{{ row.r2|round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-card">
+        <h2>Visual Comparison: Model Performance Across Libraries</h2>
+        <p>The following performance bars compare model accuracy and F1-score for internet connectivity prediction. Higher values indicate better ability to correctly classify libraries with and without internet access.</p>
+        <div class="comparison-grid">
+            {% for row in classification_results %}
+            <div class="comparison-item">
+                <strong>{{ row.model }}</strong>
+                <div class="metric-row">
+                    <span class="metric-label">Accuracy</span>
+                    <div class="metric-bar-wrapper"><span class="metric-bar" style="width:{{ row.accuracy * 100 }}%"></span></div>
+                    <span>{{ (row.accuracy * 100)|round(0) }}%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">F1-score</span>
+                    <div class="metric-bar-wrapper"><span class="metric-bar" style="width:{{ row.f1 * 100 }}%"></span></div>
+                    <span>{{ (row.f1 * 100)|round(0) }}%</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>Performance Analysis and Interpretation</h2>
+        <p>The models are compared using domain-appropriate metrics for Colombian public library analytics:</p>
+        <ul>
+            <li><strong>Accuracy:</strong> Percentage of libraries where internet connectivity is correctly predicted. Important for overall resource planning accuracy.</li>
+            <li><strong>Precision:</strong> Of libraries predicted to have internet, what percentage actually do. High precision avoids false positive assumptions about connectivity.</li>
+            <li><strong>Recall:</strong> Of libraries that actually have internet, what percentage are correctly identified. High recall ensures no connected libraries are overlooked.</li>
+            <li><strong>F1-score:</strong> Balanced metric combining precision and recall, ideal when both false positives and false negatives have costs.</li>
+            <li><strong>MAE (Mean Absolute Error):</strong> Average prediction error in user count. Lower MAE indicates more reliable user engagement forecasts for resource allocation.</li>
+            <li><strong>R² (Coefficient of Determination):</strong> Proportion of variation in user counts explained by the model. Higher R² suggests the model captures true library engagement patterns.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>Model Selection Results</h2>
+        <ul>
+            <li><strong>Best Classification Model:</strong> {{ best_classification }} offers the highest accuracy and best F1-score for internet connectivity prediction, making it the most reliable for strategic library planning decisions.</li>
+            <li><strong>Best Regression Model:</strong> {{ best_regression }} provides the lowest prediction error (MAE) and strongest explanatory power (R²) for user count estimation, supporting accurate resource and program planning.</li>
+            <li>This model pair balances accuracy, robustness, and interpretability across both library prediction tasks.</li>
+        </ul>
+    </div>
+
+    <div class="section-card best-model">
+        <h2>Selected Models for Implementation</h2>
+        <p>Based on comprehensive evaluation of model performance on Colombian public library data, the recommended model pair for production implementation is:</p>
+        <ul>
+            <li><strong>Internet Connectivity Classification:</strong> {{ best_classification }} — provides the most accurate and balanced predictions for library internet access, supporting technology investment and digital inclusion decisions.</li>
+            <li><strong>User Registration Regression:</strong> {{ best_regression }} — delivers the most accurate user engagement forecasts, enabling evidence-based service planning and resource allocation across library networks.</li>
+        </ul>
+        <p>These selections are justified by the confusion matrix analysis, comparative error metrics, and visual performance summary above. The chosen models will be deployed to support ongoing library network strategy and planning.</p>
+    </div>
+{% endblock %}
