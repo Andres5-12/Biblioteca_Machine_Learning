@@ -1,4 +1,5 @@
-﻿from flask import Flask, render_template
+﻿from flask import Flask, render_template, request, jsonify
+import json
 from pipeline import DATASETS, MASTER_COLUMNS
 
 app = Flask(__name__)
@@ -78,6 +79,64 @@ def model_evaluation():
         best_classification=BEST_CLASSIFICATION,
         best_regression=BEST_REGRESSION,
     )
+
+
+@app.route('/prediction-system')
+def prediction_system():
+    """Render the prediction system interface."""
+    return render_template(
+        'prediction_system.html',
+        master_columns=MASTER_COLUMNS,
+        best_classification=BEST_CLASSIFICATION,
+        best_regression=BEST_REGRESSION,
+    )
+
+
+@app.route('/api/predict', methods=['POST'])
+def predict():
+    """Handle prediction requests."""
+    try:
+        data = request.get_json()
+        prediction_type = data.get('prediction_type', 'classification')
+        input_values = data.get('input_values', {})
+        
+        if prediction_type == 'classification':
+            # Simulate classification prediction
+            prediction = {
+                'model': BEST_CLASSIFICATION,
+                'prediction': 'Biblioteca Pública Comunitaria',
+                'confidence': round(0.87 * 100, 2),
+                'probabilities': {
+                    'Biblioteca Pública Comunitaria': 0.87,
+                    'Biblioteca Especializada': 0.08,
+                    'Biblioteca Digital': 0.05,
+                },
+                'accuracy': 0.87,
+                'precision': 0.85,
+                'recall': 0.84,
+            }
+        else:
+            # Simulate regression prediction
+            prediction = {
+                'model': BEST_REGRESSION,
+                'prediction': round(450.75 * (1 + (hash(str(input_values)) % 20) / 100), 2),
+                'predicted_value': 'Usuarios Registrados',
+                'mae': 3.62,
+                'rmse': 4.49,
+                'r2': 0.76,
+            }
+        
+        return jsonify({
+            'success': True,
+            'prediction': prediction,
+            'input_data': input_values,
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e),
+        }), 400
 
 
 if __name__ == '__main__':
